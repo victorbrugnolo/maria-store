@@ -66,7 +66,7 @@ describe('Customer', () => {
       .send({
         name: 'Maria',
         email: 'maria@mariastore.com',
-        cpf: '12345678910',
+        cpf: '19129400008',
       });
 
     expect(response.status).toBe(400);

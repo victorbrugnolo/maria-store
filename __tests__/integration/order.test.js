@@ -7,9 +7,29 @@ describe('Order', () => {
     await truncate();
   });
 
+  async function obterToken() {
+    const user = await request(app)
+      .post('/users')
+      .send({
+        name: 'admin',
+        email: 'admin@mariastore.com',
+        password: 'admin',
+      });
+
+    const authenticate = await request(app)
+      .post('/sessions')
+      .send({
+        email: user.body.email,
+        password: 'admin',
+      });
+
+    return authenticate.body.token;
+  }
+
   it('should be able to register', async () => {
     const product = await request(app)
       .post('/products')
+      .set('Authorization', `Bearer ${await obterToken()}`)
       .send({
         sku: 1234567,
         name: 'Blusa Outletdri Inverno Jacquard',
@@ -21,11 +41,11 @@ describe('Order', () => {
       .send({
         name: 'Maria',
         email: 'maria@mariastore.com',
-        cpf: '12345678910',
+        cpf: '64023783056',
       });
 
-    const response = await response(app)
-      .post('orders')
+    const response = await request(app)
+      .post('/orders')
       .send({
         status: 'CONCLUDED',
         total: 189.8,
