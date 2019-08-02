@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { cpf } from 'cpf-cnpj-validator';
 
 export default async (req, res, next) => {
   try {
@@ -8,15 +7,7 @@ export default async (req, res, next) => {
       email: Yup.string()
         .email()
         .required(),
-      cpf: Yup.string()
-        .required()
-        .test('validateCpf', 'CPF invalid', value => {
-          const { path, createError } = this;
-          if (!cpf.isValid(value)) {
-            return createError({ path, message: 'CPF invalid' });
-          }
-          return true;
-        }),
+      password_hash: Yup.string().required(),
     });
 
     await schema.validate(req.body, { abortEarly: false });

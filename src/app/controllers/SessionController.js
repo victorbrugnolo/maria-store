@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import * as Yup from 'yup';
 
-import Customer from '../models/Customer';
+import User from '../models/User';
 import authConfig from '../../config/auth';
 
 class SessionController {
@@ -19,25 +19,25 @@ class SessionController {
 
     const { email, password } = req.body;
 
-    const customer = await Customer.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email } });
 
-    if (!customer) {
+    if (!user) {
       return res.status(401).json({ error: 'Customer e-mail not found' });
     }
 
-    if (!(await customer.checkPassword(password))) {
+    if (!(await user.checkPassword(password))) {
       return res.status(401).json({ error: 'Password does not match' });
     }
 
-    const { id, name } = customer;
+    const { id, name } = user;
 
     return res.json({
-      customer: {
+      user: {
         id,
         name,
         email,
       },
-      token: jwt.sign({ id }, authConfig.secret, {
+      token: jwt.sign(null, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
       }),
     });

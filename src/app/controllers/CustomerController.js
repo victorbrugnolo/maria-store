@@ -25,6 +25,11 @@ class CustomerController {
     const customer = await Customer.create(req.body);
     return res.json(customer);
   }
+
+  async index(_, res) {
+    const customers = await Customer.findAll();
+    return res.json(customers);
+  }
 }
 
 export default new CustomerController();

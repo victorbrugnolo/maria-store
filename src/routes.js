@@ -9,17 +9,18 @@ import validateProductStore from './app/validators/ProductStore';
 import validateCustomerStore from './app/validators/CustomerStore';
 import validateOrderStore from './app/validators/OrderStore';
 
-// import authMiddleware from './app/middlewares/auth';
-// routes.use(authMiddleware);
+import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();
 
-routes.post('/products', validateProductStore, ProductController.store);
 routes.get('/products', ProductController.index);
 routes.post('/customers', validateCustomerStore, CustomerController.store);
 routes.post('/sessions', SessionController.store);
 routes.post('/orders', validateOrderStore, OrderController.store);
 routes.get('/orders', OrderController.index);
 routes.put('/orders/:id', OrderController.cancelOrder);
+
+routes.use(authMiddleware);
+routes.post('/products', validateProductStore, ProductController.store);
 
 export default routes;
