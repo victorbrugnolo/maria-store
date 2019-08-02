@@ -15,17 +15,17 @@ import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();
 
-routes.post('/users', validateUserStore, UserController.store);
-routes.get('/products', ProductController.index);
-routes.post('/customers', validateCustomerStore, CustomerController.store);
-routes.get('/customers', CustomerController.index);
-routes.post('/sessions', SessionController.store);
-routes.post('/orders', validateOrderStore, OrderController.store);
-routes.get('/orders', OrderController.index);
-routes.put('/orders/:id', OrderController.cancelOrder);
-routes.put('/sessions', SessionController.store);
+routes.post('/v1/users', validateUserStore, UserController.store);
+routes.get('/v1/products', ProductController.index);
+routes.post('/v1/customers', validateCustomerStore, CustomerController.store);
+routes.get('/v1/customers', CustomerController.index);
+routes.post('/v1/sessions', SessionController.store);
+routes.post('/v1/orders', validateOrderStore, OrderController.store);
+routes.get('/v1/orders', OrderController.index);
+routes.put('/v1/orders/:id', OrderController.cancelOrder);
+routes.put('/v1/sessions', SessionController.store);
 
 routes.use(authMiddleware);
-routes.post('/products', validateProductStore, ProductController.store);
+routes.post('/v1/products', validateProductStore, ProductController.store);
 
 export default routes;
