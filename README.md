@@ -21,11 +21,11 @@ docker-compose up
 ### POST `/v1/users`
 
 ```json
-  {
-    "name": "Ana"
-    "email": "gerenta@mariastore.com"
-    "password": "123456"
-  }
+{
+  "name": "Ana"
+  "email": "gerenta@mariastore.com"
+  "password": "123456"
+}
 ```
 
 ### POST `/v1/sessions` (Autenticação)
@@ -50,7 +50,6 @@ docker-compose up
 ### GET `/v1/products`
 
 ```json
-{
 [
   {
   "id": 1,
