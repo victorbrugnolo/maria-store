@@ -22,7 +22,7 @@ const modelOrderReturn = {
 
 class OrderController {
   async store(req, res) {
-    const { status, total: totalOrder, buyer: customer_id } = req.body;
+    const { status, total: totalOrder, customer_id } = req.body;
 
     const order = await Order.create({
       status,
@@ -35,12 +35,7 @@ class OrderController {
     await Promise.all(
       req.body.items.map(async item => {
         const order_id = id;
-        const {
-          amount,
-          price_unit,
-          total: totalItem,
-          product: product_id,
-        } = item;
+        const { amount, price_unit, total: totalItem, product_id } = item;
 
         await OrderItem.create({
           amount,

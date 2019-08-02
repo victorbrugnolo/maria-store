@@ -9,7 +9,7 @@ export default async (req, res, next) => {
       total: Yup.number()
         .min(1)
         .required(),
-      buyer: Yup.number().required(),
+      customer_id: Yup.number().required(),
       items: Yup.array()
         .of(
           Yup.object().shape({
@@ -20,7 +20,7 @@ export default async (req, res, next) => {
             total: Yup.number()
               .min(1)
               .required(),
-            product: Yup.number().required(),
+            product_id: Yup.number().required(),
           })
         )
         .required(),

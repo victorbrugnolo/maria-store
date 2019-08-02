@@ -18,6 +18,7 @@ const routes = new Router();
 routes.post('/users', validateUserStore, UserController.store);
 routes.get('/products', ProductController.index);
 routes.post('/customers', validateCustomerStore, CustomerController.store);
+routes.get('/customers', CustomerController.index);
 routes.post('/sessions', SessionController.store);
 routes.post('/orders', validateOrderStore, OrderController.store);
 routes.get('/orders', OrderController.index);
