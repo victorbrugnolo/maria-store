@@ -8,6 +8,7 @@ class Order extends Model {
         customer_id: Sequelize.INTEGER,
         total: Sequelize.DOUBLE,
         status: Sequelize.ENUM('CONCLUDED', 'CANCELED'),
+        cancel_date: Sequelize.DATE,
       },
       {
         sequelize,

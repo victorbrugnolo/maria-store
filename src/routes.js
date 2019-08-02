@@ -5,18 +5,21 @@ import SessionController from './app/controllers/SessionController';
 import ProductController from './app/controllers/ProductController';
 import OrderController from './app/controllers/OrderController';
 
+import validateProductStore from './app/validators/ProductStore';
+import validateCustomerStore from './app/validators/CustomerStore';
+import validateOrderStore from './app/validators/OrderStore';
+
 // import authMiddleware from './app/middlewares/auth';
+// routes.use(authMiddleware);
 
 const routes = new Router();
 
-routes.post('/customers', CustomerController.store);
-routes.post('/sessions', SessionController.store);
-
-// routes.use(authMiddleware);
-
-routes.post('/products', ProductController.store);
+routes.post('/products', validateProductStore, ProductController.store);
 routes.get('/products', ProductController.index);
-routes.post('/orders', OrderController.store);
+routes.post('/customers', validateCustomerStore, CustomerController.store);
+routes.post('/sessions', SessionController.store);
+routes.post('/orders', validateOrderStore, OrderController.store);
 routes.get('/orders', OrderController.index);
+routes.put('/orders/:id', OrderController.cancelOrder);
 
 export default routes;

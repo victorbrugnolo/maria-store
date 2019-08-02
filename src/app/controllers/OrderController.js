@@ -1,6 +1,3 @@
-// import * as Yup from 'yup';
-// import Sequelize from 'sequelize';
-
 import Order from '../models/Order';
 import OrderItem from '../models/OrderItem';
 import Customer from '../models/Customer';
@@ -25,49 +22,63 @@ const modelOrderReturn = {
 
 class OrderController {
   async store(req, res) {
-    // const schema = Yup.object().shape({
-    //   sku: Yup.number()
-    //     .integer()
-    //     .required(),
-    //   name: Yup.string().required(),
-    //   price: Yup.number()
-    //     .min(1)
-    //     .required(),
-    // });
+    const { status, total: totalOrder, buyer: customer_id } = req.body;
 
-    // if (!(await schema.isValid(req.body))) {
-    //   return res.status(400).json({ error: 'Field validation fails.' });
-    // }
-
-    // const { Op } = Sequelize;
-
-    // const OrderExist = await Product.findOne({
-    //   where: {
-    //     [Op.or]: [{ sku: req.body.sku }, { name: req.body.name }],
-    //   },
-    // });
-
-    // if (productExist) {
-    //   return res.status(400).json({ error: 'Product already exists.' });
-    // }
-
-    const order = await Order.create(req.body);
+    const order = await Order.create({
+      status,
+      total: totalOrder,
+      customer_id,
+    });
 
     const { id } = order;
 
-    for (const item of req.body.items) {
-      item.order_id = id;
-      await OrderItem.create(item);
-    }
+    await Promise.all(
+      req.body.items.map(async item => {
+        const order_id = id;
+        const {
+          amount,
+          price_unit,
+          total: totalItem,
+          product: product_id,
+        } = item;
 
-    const ret = await Order.findByPk(id, modelOrderReturn);
+        await OrderItem.create({
+          amount,
+          price_unit,
+          total: totalItem,
+          product_id,
+          order_id,
+        });
+      })
+    );
 
-    return res.json(ret);
+    const orderCreated = await Order.findByPk(id, modelOrderReturn);
+
+    return res.json(orderCreated);
   }
 
   async index(_, res) {
-    const products = await Order.findAll(modelOrderReturn);
-    return res.json(products);
+    const orders = await Order.findAll(modelOrderReturn);
+    return res.json(orders);
+  }
+
+  async cancelOrder(req, res) {
+    const order = await Order.findByPk(req.params.id);
+
+    if (order.status === 'CANCELED') {
+      return res.status(400).json({ error: 'Order already canceled' });
+    }
+
+    order.status = 'CANCELED';
+    order.cancel_date = new Date();
+    await order.save();
+
+    const { id, status } = order;
+
+    return res.json({
+      id,
+      status,
+    });
   }
 }
 
