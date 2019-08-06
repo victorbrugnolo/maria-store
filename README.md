@@ -23,7 +23,7 @@ docker-compose up
 ```json
 {
   "name": "Ana"
-  "email": "gerenta@mariastore.com"
+  "email": "gerente@mariastore.com"
   "password": "123456"
 }
 ```
